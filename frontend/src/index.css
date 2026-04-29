@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 215 25% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+
+    --primary: 217 72% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 16% 93%;
+    --secondary-foreground: 215 25% 25%;
+
+    --muted: 210 14% 95%;
+    --muted-foreground: 215 12% 50%;
+
+    --accent: 152 55% 42%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 20% 90%;
+    --input: 214 20% 90%;
+    --ring: 217 72% 50%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 215 25% 25%;
+    --sidebar-primary: 217 72% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 16% 96%;
+    --sidebar-accent-foreground: 215 25% 15%;
+    --sidebar-border: 214 20% 92%;
+    --sidebar-ring: 217 72% 50%;
+
+    /* Custom tokens */
+    --success: 152 55% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    /* Seat colors */
+    --seat-available: 152 55% 42%;
+    --seat-booked: 0 72% 55%;
+    --seat-blocked: 215 12% 75%;
+    --seat-selected: 45 93% 50%;
+  }
+
+  .dark {
+    --background: 220 20% 10%;
+    --foreground: 210 20% 92%;
+
+    --card: 220 18% 14%;
+    --card-foreground: 210 20% 92%;
+
+    --popover: 220 18% 14%;
+    --popover-foreground: 210 20% 92%;
+
+    --primary: 217 72% 56%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 20%;
+    --secondary-foreground: 210 20% 85%;
+
+    --muted: 220 14% 18%;
+    --muted-foreground: 215 12% 55%;
+
+    --accent: 152 55% 38%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 14% 22%;
+    --input: 220 14% 22%;
+    --ring: 217 72% 56%;
+
+    --sidebar-background: 220 18% 12%;
+    --sidebar-foreground: 210 20% 85%;
+    --sidebar-primary: 217 72% 56%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 18%;
+    --sidebar-accent-foreground: 210 20% 92%;
+    --sidebar-border: 220 14% 20%;
+    --sidebar-ring: 217 72% 56%;
+
+    --success: 152 55% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 45%;
+    --warning-foreground: 0 0% 100%;
+    --info: 199 89% 42%;
+    --info-foreground: 0 0% 100%;
+
+    --seat-available: 152 55% 38%;
+    --seat-booked: 0 72% 45%;
+    --seat-blocked: 220 10% 40%;
+    --seat-selected: 45 93% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .seat-btn {
+    @apply w-9 h-9 rounded-md text-xs font-medium transition-all duration-150 flex items-center justify-center cursor-pointer border;
+  }
+  .seat-available {
+    @apply bg-[hsl(var(--seat-available)/0.15)] border-[hsl(var(--seat-available)/0.4)] text-[hsl(var(--seat-available))] hover:bg-[hsl(var(--seat-available)/0.25)];
+  }
+  .seat-booked {
+    @apply bg-[hsl(var(--seat-booked)/0.1)] border-[hsl(var(--seat-booked)/0.3)] text-[hsl(var(--seat-booked)/0.5)] cursor-not-allowed;
+  }
+  .seat-blocked {
+    @apply bg-muted border-border text-muted-foreground cursor-not-allowed opacity-50;
+  }
+  .seat-selected {
+    @apply bg-[hsl(var(--seat-selected)/0.2)] border-[hsl(var(--seat-selected))] text-[hsl(var(--warning))] ring-2 ring-[hsl(var(--seat-selected)/0.4)];
+  }
+}
+
+@layer utilities {
+  @keyframes scanLine {
+    0%   { top: 0%;   opacity: 1; }
+    50%  { top: 100%; opacity: 1; }
+    100% { top: 0%;   opacity: 1; }
+  }
+  .animate-scan-line {
+    animation: scanLine 2s ease-in-out infinite;
+  }
+}
