@@ -21,31 +21,31 @@ const app = express();
 
 // ─── Security Middleware ──────────────────────────────────────────────────────
 app.use(helmet({
-  crossOriginResourcePolicy: { policy: 'cross-origin' },
+  crossOriginResourcePolicy: false,
 }));
 
-// ─── CORS ─────────────────────────────────────────────────────────────────────
+// ─── Explicit CORS Configuration ──────────────────────────────────────────────
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://sec-slot-booking.vercel.app'
+];
+
 const corsOptions = {
-  origin: (origin, callback) => {
-    // In development: allow any localhost/127.0.0.1 origin regardless of port
-    if (!origin) return callback(null, true); // curl, Postman, mobile
-
-    const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173').split(',').map(o => o.trim());
-    const isLocalhost = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
-    const isDev = process.env.NODE_ENV !== 'production';
-
-    if (allowedOrigins.includes(origin) || (isDev && isLocalhost)) {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error(`CORS policy: origin ${origin} not allowed`));
+      callback(new Error('CORS not allowed by server'));
     }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200,
 };
+
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
 // ─── Body Parsing ─────────────────────────────────────────────────────────────
 app.use(express.json({ limit: '10kb' }));
@@ -68,7 +68,7 @@ const globalLimiter = rateLimit({
 });
 app.use(globalLimiter);
 
-// ─── Disable Caching for API ──────────────────────────────────────────────────
+// ─── Disable API Caching ──────────────────────────────────────────────────────
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   res.set('Pragma', 'no-cache');
@@ -76,9 +76,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// ─── Health Check ─────────────────────────────────────────────────────────────
+// ─── Health Check Route ───────────────────────────────────────────────────────
 app.get('/health', (req, res) => {
-  res.json({ success: true, message: 'SEC Slot Booking API is healthy', timestamp: new Date().toISOString() });
+  res.json({
+    success: true,
+    message: 'SEC Slot Booking API is healthy',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // ─── API Routes ───────────────────────────────────────────────────────────────
