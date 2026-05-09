@@ -25,10 +25,13 @@ app.use(helmet({
 }));
 
 // ─── Explicit CORS Configuration ──────────────────────────────────────────────
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://sec-slot-booking.vercel.app'
-];
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
+  : [
+      'http://localhost:5173',
+      'http://localhost:8080',
+      'https://sec-slot-booking.vercel.app',
+    ];
 
 const corsOptions = {
   origin: function (origin, callback) {
